@@ -14,6 +14,7 @@ import org.jvnet.localizer.Localizable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 /**
  * Performs the actual slave installation.
@@ -39,13 +40,7 @@ public class LaunchdSlaveInstaller extends AbstractUnixSlaveInstaller {
     @SuppressFBWarnings("DM_EXIT")
     @Override
     public void install(LaunchConfiguration params, Prompter prompter) throws InstallationException, IOException, InterruptedException {
-        tmpDir = File.createTempFile("jenkins", "tmp");
-        if (!tmpDir.delete()) {
-            throw new IOException();
-        }
-        if (!tmpDir.mkdirs()) {
-            throw new IOException();
-        }
+        tmpDir = Files.createTempDirectory("jenkins" + "tmp").toFile();
 
         File sudo = copyResourceIntoExecutableFile("cocoasudo");
         File installSh = copyResourceIntoExecutableFile("install.sh");
